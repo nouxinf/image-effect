@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask Boilerplate</title>
+</head>
+<body>
+    <h1>Welcome</h1>
+    <form id="imgForm">
+        <input type="file" id="imgInput">
+        <div>
+            <label><input type="radio" name="bubble" value="left" checked> Left Bubble</label>
+            <label><input type="radio" name="bubble" value="right"> Right Bubble</label>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+    <img id="result" src="" alt="Result will appear here">
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
