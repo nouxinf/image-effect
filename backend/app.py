@@ -35,7 +35,17 @@ def speechbubbleright():
 
     result_base64 = edit_image(image_bytes, "right")
     return jsonify({"image": f"data:image/png;base64,{result_base64}"})
+@app.route('/api/speechbubblecentre', methods=['POST'])
+def speechbubblecentre():
+    data = request.json
+    if not data or "image" not in data:
+        return jsonify({"error": "No image data"}), 400
     
+    base64_str = data["image"].split(",")[1] if "," in data["image"] else data["image"]
+    image_bytes = base64.b64decode(base64_str)
+
+    result_base64 = edit_image(image_bytes, "centre")
+    return jsonify({"image": f"data:image/png;base64,{result_base64}"})
 
 if __name__ == '__main__':
     app.run(debug=True)

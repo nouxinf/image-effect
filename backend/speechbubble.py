@@ -7,8 +7,10 @@ def edit_image(image_bytes, bubble_dir):
     img1 = Image.open(BytesIO(image_bytes))
     if bubble_dir == "1" or bubble_dir.lower() == "left":
         img2 = Image.open("speechbubbleleft.png")
-    else:
+    elif bubble_dir == "2" or bubble_dir.lower() == "right":
         img2 = Image.open("speechbubbleright.png")
+    else:
+        img2 = Image.open("speechbubblecentre.png")
 
     img1_width, img1_height = img1.size
     new_height = int(img1_height * 0.2)

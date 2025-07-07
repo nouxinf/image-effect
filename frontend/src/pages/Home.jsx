@@ -1,16 +1,21 @@
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SpeechBubbleExampleImg from "../assets/speechbubbleexample.png";
+import "./Home.css"
+import { useNavigate } from "react-router-dom";
+import DarkModeToggle from "../components/DarkModeToggle";
 
 export default function Home() {
+    const navigate = useNavigate();
     return (
         <div className="container py-5">
+            <DarkModeToggle />
             <div className="text-center mb-5">
                 <h1 className="display-4 fw-bold">Welcome to ImageEffect</h1>
                 <p className="lead">Enhance your images with a variety of creative filters and effects, including speech bubbles, color adjustments, and more!</p>
             </div>
             <div className="row g-4 justify-content-center">
-                <div className="col-md-4">
+                <div className="col-md-4" onClick={() => navigate('/speechbubble')}>
                     <div className="card h-100 shadow-sm">
                         <img src={SpeechBubbleExampleImg} className="card-img-top" alt="Speech Bubble" />
                         <div className="card-body">
@@ -37,9 +42,6 @@ export default function Home() {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="text-center mt-5">
-                <a href="/app" className="btn btn-primary btn-lg">Get Started</a>
             </div>
         </div>
     );
