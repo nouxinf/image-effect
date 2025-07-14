@@ -1,7 +1,7 @@
 {
   "name": "fullstack-dev",
   "scripts": {
-    "dev": "concurrently \"npm run dev --prefix frontend\" \"python backend/app.py\""
+    "start": "concurrently \"npm run dev --prefix frontend\" \"python backend/app.py\""
   },
   "devDependencies": {
     "concurrently": "^8.0.0"
