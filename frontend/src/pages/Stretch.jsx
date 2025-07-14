@@ -3,10 +3,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import DarkModeToggle from "../components/DarkModeToggle";
 import Header from "../components/Header";
 
-function SpeechBubble() {
+function Stretch() {
     const [output, setOutput] = useState(null);
     const [file, setFile] = useState(null);
-    const [bubble, setBubble] = useState('left');
+    const [stretchFactor, setStretchFactor] = useState(1.5); // <-- added
     const [darkMode, setDarkMode] = useState(false);
 
     useEffect(() => {
@@ -19,35 +19,31 @@ function SpeechBubble() {
     }, [darkMode]);
 
     const handleFile = (e) => {
-        setFile(e.target.files[0]);
-    };
-
-    const handleBubble = (e) => {
-        setBubble(e.target.value);
+        const selectedFile = e.target.files[0];
+        if (selectedFile) {
+            setFile(selectedFile);
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!file) return;
+
         const reader = new FileReader();
         reader.onloadend = async () => {
             const base64 = reader.result;
-            let endpoint = '';
-            if (bubble === 'left') {
-                endpoint = 'http://localhost:5000/api/speechbubbleleft';
-            } else if (bubble === 'right') {
-                endpoint = 'http://localhost:5000/api/speechbubbleright';
-            } else if (bubble === 'centre') {
-                endpoint = 'http://localhost:5000/api/speechbubblecentre';
-            }
 
-            const res = await fetch(endpoint, {
+            const res = await fetch('http://localhost:5000/api/stretch', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ image: base64 })
+                body: JSON.stringify({
+                    image: base64,
+                    factor: stretchFactor
+                })
             });
+
             const data = await res.json();
             setOutput(data.image);
         };
@@ -59,27 +55,27 @@ function SpeechBubble() {
         <Header />
         <div className={`container mt-5${darkMode ? ' bg-dark text-light' : ''}`} style={{ minHeight: '100vh' }}>
             <DarkModeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
-            <h1 className="mb-5">Speech Bubble</h1>
-            <form onSubmit={handleSubmit} className={`card p-4`}>
+            <h1 className="mb-5">Stretch Image</h1>
+            <form onSubmit={handleSubmit} className="card p-4">
                 <div className="mb-3">
                     <input type="file" className="form-control" onChange={handleFile} />
                 </div>
                 <div className="mb-3">
-                    <label className="form-check form-check-inline">
-                        <input type="radio" className="form-check-input" name="bubble" value="left" checked={bubble === 'left'} onChange={handleBubble} />
-                        Left Bubble
-                    </label>
-                    <label className="form-check form-check-inline">
-                        <input type="radio" className="form-check-input" name="bubble" value="right" checked={bubble === 'right'} onChange={handleBubble} />
-                        Right Bubble
-                    </label>
-                    <label className="form-check form-check-inline">
-                        <input type="radio" className="form-check-input" name="bubble" value="centre" checked={bubble === 'centre'} onChange={handleBubble} />
-                        Centre Bubble
-                    </label>
+                    <label htmlFor="stretchFactor" className="form-label">Stretch Factor</label>
+                    <input
+                        id="stretchFactor"
+                        type="number"
+                        className="form-control"
+                        value={stretchFactor}
+                        onChange={(e) => setStretchFactor(parseFloat(e.target.value))}
+						max={10}
+						min={0.02}
+						step="any"
+                    />
                 </div>
                 <button type="submit" className="btn btn-primary">Submit</button>
             </form>
+
             {output && (
                 <div className="mt-4 text-center">
                     <img src={output} alt="Processed" className="img-fluid rounded shadow" style={{ maxWidth: '400px' }} />
@@ -90,4 +86,4 @@ function SpeechBubble() {
     );
 }
 
-export default SpeechBubble;
+export default Stretch;
